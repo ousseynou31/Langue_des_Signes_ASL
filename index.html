@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signes à l'école — V1.8</title>
+<style>
+:root{
+  --bg:#0b1020; --panel:#121a2d; --panel2:#18233b; --text:#f7f9ff;
+  --muted:#aeb9d3; --accent:#4ade80; --accent2:#60a5fa; --danger:#fb7185;
+  --border:#2b3a5c; --shadow:0 14px 40px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(135deg,#080c18,#101a31);color:var(--text);min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{max-width:1150px;margin:auto;padding:18px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px 22px}
+.logo{display:flex;align-items:center;gap:12px}.logoIcon{font-size:42px}.logo h1{margin:0;font-size:25px}.logo p{margin:3px 0 0;color:var(--muted)}
+.homeBtn{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:10px 15px;border-radius:12px}
+.hero{background:linear-gradient(135deg,#17243f,#132b38);border:1px solid var(--border);border-radius:24px;padding:28px;box-shadow:var(--shadow);margin-bottom:20px}
+.hero h2{font-size:34px;margin:0 0 8px}.hero p{color:var(--muted);max-width:700px;line-height:1.55}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:20px;transition:.2s;box-shadow:0 8px 25px rgba(0,0,0,.14)}
+button.card{text-align:left;color:var(--text);width:100%}.card:hover{transform:translateY(-3px);border-color:var(--accent2)}
+.icon{font-size:32px}.card h3{margin:10px 0 5px}.card p{margin:0;color:var(--muted);line-height:1.45}
+.sectionTitle{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:20px 0 12px}
+.sectionTitle h2{margin:0}.back{background:transparent;border:1px solid var(--border);color:var(--text);border-radius:10px;padding:8px 12px}
+.letters{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.letter{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:14px;padding:20px 8px;font-size:26px;font-weight:800}
+.letter:hover{background:var(--panel2);border-color:var(--accent2)}
+.detail{background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:25px;box-shadow:var(--shadow)}
+.bigLetter{font-size:110px;text-align:center;font-weight:900;color:var(--accent)}
+.demo{min-height:220px;border:2px dashed #47618e;border-radius:18px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);background:#0e1629}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}.primary,.secondary{border:0;border-radius:12px;padding:11px 15px}.primary{background:var(--accent);color:#06200f;font-weight:800}.secondary{background:var(--panel2);border:1px solid var(--border);color:var(--text)}
+.search{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--text);padding:14px 16px;border-radius:13px;margin-bottom:14px;outline:none}
+.vocabGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.vocab{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:17px;color:var(--text);text-align:left}
+.vocab small{color:var(--muted)}.vocab strong{display:block;font-size:19px;margin:5px 0}
+.quiz{max-width:720px;margin:auto}.question{font-size:25px;font-weight:800;margin:10px 0 20px}
+.answers{display:grid;gap:10px}.answer{padding:14px;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;text-align:left}
+.answer.correct{border-color:var(--accent);background:#123323}.answer.wrong{border-color:var(--danger);background:#351722}
+.progress{height:12px;background:#26334e;border-radius:20px;overflow:hidden}.progress>div{height:100%;background:var(--accent);width:0}
+.badges{display:flex;flex-wrap:wrap;gap:10px}.badge{padding:10px 13px;background:var(--panel2);border:1px solid var(--border);border-radius:12px}
+.note{font-size:13px;color:var(--muted);margin-top:14px;line-height:1.5}
+.hidden{display:none}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 0 10px}
+@media(max-width:650px){.letters{grid-template-columns:repeat(4,1fr)}.hero h2{font-size:27px}.bigLetter{font-size:80px}}
+
+.resourceImg{width:100%;max-height:360px;object-fit:contain;border-radius:16px;background:#fff;padding:10px}
+.videoWrap{position:relative;width:100%;padding-top:56.25%;border-radius:16px;overflow:hidden;background:#000}
+.videoWrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.source{font-size:12px;color:var(--muted);margin-top:8px}
+.linkBtn{display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+
+.alphabetExplorer{display:grid;grid-template-columns:minmax(280px,1fr) minmax(320px,1.35fr);gap:16px}
+.letterPanel,.signPanel{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.panelTitle{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.panelTitle h3{margin:0}.modeTabs{display:flex;gap:8px;margin-bottom:14px}
+.modeTab{flex:1;padding:10px;border-radius:11px;border:1px solid var(--border);background:var(--panel2);color:var(--text)}
+.modeTab.active{background:var(--accent);color:#06200f;border-color:var(--accent);font-weight:800}
+.letterList{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-height:560px;overflow:auto}
+.letterTile{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:12px 6px;font-size:23px;font-weight:800}
+.letterTile.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(74,222,128,.18)}
+.signList{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:560px;overflow:auto}
+.signTile{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:7px;cursor:pointer}
+.signTile img{width:100%;height:90px;object-fit:contain;background:#fff;border-radius:8px}
+.signTile b{display:block;text-align:center;margin-top:5px}
+.selectedSign{background:#fff;border-radius:18px;min-height:360px;display:flex;align-items:center;justify-content:center;padding:18px}
+.selectedSign img{max-width:100%;max-height:420px;object-fit:contain}
+.letterResult{text-align:center;font-size:92px;font-weight:900;color:var(--accent);min-height:360px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.letterResult small{font-size:16px;color:var(--muted);font-weight:500}
+@media(max-width:800px){.alphabetExplorer{grid-template-columns:1fr}.letterList{max-height:300px}.signList{max-height:300px}.selectedSign,.letterResult{min-height:280px}}
+
+.numberExplorer{display:grid;grid-template-columns:minmax(280px,1fr) minmax(320px,1.35fr);gap:16px}
+.numberPanel,.numberSignPanel{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.numberList{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-height:560px;overflow:auto}
+.numberTile{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:14px 6px;font-size:23px;font-weight:800}
+.numberTile:hover{border-color:var(--accent2);background:#20304f}
+.numberTile.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(74,222,128,.18);background:#183526}
+.selectedNumberImage{min-height:360px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}
+.selectedNumberImage img{max-width:100%;width:100%;height:360px;object-fit:contain;border-radius:12px}
+.numberInfo{margin-top:12px;padding:12px;border-radius:12px;background:var(--panel2);border:1px solid var(--border);color:var(--muted);line-height:1.5}
+.numberSource{font-size:12px;color:var(--muted);margin-top:10px}
+@media(max-width:800px){.numberExplorer{grid-template-columns:1fr}.numberList{max-height:300px}.selectedNumberImage{min-height:280px}.selectedNumberImage img{height:280px}}
+/* ===== QUIZ INTERACTIF V2 ===== */
+.quizStart{max-width:820px;margin:0 auto}
+.quizModeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.quizModeCard{border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:20px;padding:26px;text-align:center;box-shadow:var(--shadow);transition:.2s}
+.quizModeCard:hover{transform:translateY(-3px);border-color:var(--accent2)}
+.quizModeIcon{font-size:48px;margin-bottom:8px}
+.quizModeCard h3{margin:8px 0}
+.quizModeCard p{color:var(--muted);line-height:1.45}
+.quizTop{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.quizTarget{font-size:58px;font-weight:900;text-align:center;color:var(--accent);margin:10px 0 5px}
+.quizInstruction{text-align:center;color:var(--muted);margin:0 0 18px}
+.quizChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.quizChoice{position:relative;min-height:230px;padding:12px;border:2px solid var(--border);background:var(--panel2);color:var(--text);border-radius:18px;transition:.15s;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.quizChoice:hover:not(:disabled){border-color:var(--accent2);transform:translateY(-2px)}
+.quizChoice img{width:100%;height:170px;object-fit:contain;background:#fff;border-radius:12px;padding:8px}
+.quizChoice .choiceLabel{margin-top:8px;font-weight:800}
+.quizChoice.correct{border-color:var(--accent);background:#123b25;box-shadow:0 0 0 3px rgba(74,222,128,.18)}
+.quizChoice.wrong{border-color:var(--danger);background:#421925;box-shadow:0 0 0 3px rgba(251,113,133,.14)}
+.quizChoice.correct::after{content:"✓";position:absolute;top:8px;right:10px;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#06200f;font-weight:900;font-size:22px}
+.quizChoice.wrong::after{content:"✕";position:absolute;top:8px;right:10px;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--danger);color:#fff;font-weight:900;font-size:22px}
+.quizFeedback{text-align:center;font-size:18px;font-weight:800;min-height:28px}
+.quizFooter{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+.quizScore{font-weight:800;color:var(--accent)}
+.quizCounter{color:var(--muted)}
+@media(max-width:700px){
+  .quizModeGrid,.quizChoices{grid-template-columns:1fr}
+  .quizChoice{min-height:210px}
+}
+
+/* ===== Boutons futurs désactivés ===== */
+.card.disabledCard{
+  opacity:.48;
+  cursor:not-allowed;
+  filter:grayscale(.25);
+}
+.card.disabledCard:hover{
+  transform:none;
+  border-color:var(--border);
+}
+.card.disabledCard .comingSoon{
+  display:inline-block;
+  margin-top:10px;
+  padding:5px 9px;
+  border-radius:9px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
+
+/* Exercices secondaires désactivés temporairement */
+.disabledFeature{
+  opacity:.45 !important;
+  cursor:not-allowed !important;
+  filter:grayscale(.35);
+  pointer-events:none;
+}
+.disabledFeature small{
+  display:inline-block;
+  margin-left:6px;
+  font-size:11px;
+  opacity:.9;
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="logo"><div class="logoIcon">🤟</div><div><h1>Signes à l'école</h1><p>Apprendre l'ASL en s'amusant — Version 2.2</p></div></div>
+  <button class="homeBtn" onclick="showHome()">🏠 Accueil</button>
+</header>
+<main id="main"></main>
+<footer>Prototype pédagogique V2.3 • Nombres ASL vérifiés avec références.</footer>
+</div>
+
+<script>
+const alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const vocab=[
+ ["Bonjour","👋","Salutations"],["Au revoir","👋","Salutations"],["Merci","🙏","Politesse"],
+ ["S'il te plaît","🤲","Politesse"],["Pardon","🙇","Politesse"],["Oui","✅","Communication"],
+ ["Non","❌","Communication"],["Comment ça va ?","🙂","Communication"],["Ça va bien","😊","Communication"],
+ ["Je comprends","👍","Communication"],["Je ne comprends pas","❓","Communication"],["Répète, s'il te plaît","🔄","Communication"],
+ ["École","🏫","École"],["Professeur","👨‍🏫","École"],["Élève","🧑‍🎓","École"],["Livre","📖","École"],
+ ["Cahier","📓","École"],["Stylo","🖊️","École"],["Ami","🧑‍🤝‍🧑","École"],["Aide","🆘","Besoins"]
+];
+let learned=JSON.parse(localStorage.getItem("signesLearned")||"[]");
+let score=Number(localStorage.getItem("signesScore")||0);
+
+function showHome(){
+ document.getElementById("main").innerHTML=`
+ <section class="hero"><h2>Bienvenue dans Signes à l'école 👋</h2>
+ <p>Une première version pour apprendre l'alphabet, découvrir des mots essentiels et s'entraîner avec des quiz. L'ASL est la langue de référence de ce prototype.</p></section>
+ <div class="grid">
+  <!-- LES 3 PREMIERS BOUTONS : ACTIFS -->
+  <button class="card" onclick="showAlphabet()">
+    <div class="icon">🔤</div>
+    <h3>Apprendre l'alphabet</h3>
+    <p>A à Z — la fenêtre du signe s'ouvre automatiquement.</p>
+  </button>
+
+  <button class="card" onclick="showNumbers()">
+    <div class="icon">🔢</div>
+    <h3>Chiffres et nombres</h3>
+    <p>0 à 20 — découvre les signes et les mouvements.</p>
+  </button>
+
+  <button class="card" onclick="showQuiz()">
+    <div class="icon">🎮</div>
+    <h3>Jeux & quiz</h3>
+    <p>Choisis le mode lettres ou chiffres & nombres et reconnais le bon signe parmi 4 propositions.</p>
+  </button>
+
+  <!-- LES 3 DERNIERS BOUTONS : DÉSACTIVÉS POUR LE MOMENT -->
+  <button class="card disabledCard" type="button" disabled aria-disabled="true">
+    <div class="icon">👋</div>
+    <h3>Vocabulaire</h3>
+    <p>Cette partie sera activée après les trois premiers modules.</p>
+    <span class="comingSoon">🔒 Bientôt disponible</span>
+  </button>
+
+  <button class="card disabledCard" type="button" disabled aria-disabled="true">
+    <div class="icon">🏆</div>
+    <h3>Ma progression</h3>
+    <p>Suivi des apprentissages et des résultats.</p>
+    <span class="comingSoon">🔒 Bientôt disponible</span>
+  </button>
+
+  <button class="card disabledCard" type="button" disabled aria-disabled="true">
+    <div class="icon">📚</div>
+    <h3>Ressources</h3>
+    <p>Activités et contenus complémentaires.</p>
+    <span class="comingSoon">🔒 Bientôt disponible</span>
+  </button>
+ </div>
+ <div class="grid" style="margin-top:18px">
+   <button class="card disabledCard" type="button" disabled aria-disabled="true">
+     <div class="icon">🎥</div><h3>Mini-leçon vidéo</h3>
+     <p>Cette ressource sera disponible plus tard.</p><span class="comingSoon">🔒 Bientôt</span>
+   </button>
+   <button class="card disabledCard" type="button" disabled aria-disabled="true">
+     <div class="icon">🌟</div><h3>Signe du jour</h3>
+     <p>Cette fonctionnalité sera disponible plus tard.</p><span class="comingSoon">🔒 Bientôt</span>
+   </button>
+ </div>`;
+}
+function back(){showHome()}
+
+const aslImageBase="https://www.anysign.app/images/alphabet/asl/asl-alphabet-letter-";
+const aslImageSuffix="-american-sign-language-handshape.webp";
+const aslImages=Object.fromEntries(alphabet.map(l=>[
+  l, aslImageBase+l.toLowerCase()+aslImageSuffix
+]));
+
+function alphabetExplorer(mode="letters", selected="A"){
+ const safe = alphabet.includes(selected)?selected:"A";
+ const left = mode==="letters"
+   ? `<div class="letterList">${alphabet.map(l=>`<button class="letterTile ${l===safe?"active":""}" type="button" onclick="alphabetExplorer('letters','${l}')">${l}</button>`).join("")}</div>`
+   : `<div class="signList">${alphabet.map(l=>`<button class="signTile" onclick="alphabetExplorer('signs','${l}')"><img src="${aslImages[l]}" alt="Signe ASL ${l}" loading="lazy"><b>${l}</b></button>`).join("")}</div>`;
+
+ const right = mode==="letters"
+   ? `<div class="selectedSign"><img src="${aslImages[safe]}" alt="Signe ASL de la lettre ${safe}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'text-align:center;color:#24324d;font-weight:800\'>Image du signe ${safe} indisponible</div>'"></div>
+      <h2 style="text-align:center;margin:12px 0 0">Lettre ${safe}</h2>
+      <p class="note" style="text-align:center">Clique sur une autre lettre à gauche pour afficher son signe.</p>`
+   : `<div class="letterResult"><div>${safe}</div><small>Le signe sélectionné correspond à la lettre ${safe}.</small></div>
+      <p class="note" style="text-align:center">Clique sur une autre image à gauche pour identifier le signe.</p>`;
+
+ document.getElementById("main").innerHTML=`
+ <div class="sectionTitle"><h2>🔤 Alphabet ASL interactif</h2><button class="back" onclick="back()">← Retour</button></div>
+ <div class="modeTabs">
+   <button class="modeTab disabledFeature" disabled aria-disabled="true">🔤 Je connais la lettre → voir le signe <small>🔒 Bientôt</small></button>
+   <button class="modeTab disabledFeature" disabled aria-disabled="true">🤟 Je vois le signe → trouver la lettre <small>🔒 Bientôt</small></button>
+ </div>
+ <div class="alphabetExplorer">
+   <section class="letterPanel">
+     <div class="panelTitle"><h3>${mode==="letters"?"Toutes les lettres":"Tous les signes"}</h3><span class="note">A–Z</span></div>
+     ${left}
+   </section>
+   <section class="signPanel">
+     <div class="panelTitle"><h3>${mode==="letters"?"Signe correspondant":"Lettre correspondante"}</h3></div>
+     ${right}
+   </section>
+ </div>
+ <div class="detail" style="margin-top:16px">
+   <h3>💡 Comment apprendre</h3>
+   <p class="note">Mode 1 : clique sur A, B, C… pour voir immédiatement le signe. Mode 2 : clique sur une image de main pour révéler la lettre correspondante. Les lettres J et Z comportent un mouvement ; une image fixe montre seulement la position de référence.</p>
+   <p class="source">Les illustrations individuelles sont chargées depuis Anysign, dont la page de référence présente les 26 handshapes ASL et indique une vérification avec des signeurs natifs et des spécialistes. Avant une diffusion publique de l'application, nous vérifierons les conditions d'utilisation des images.</p>
+ </div>`;
+}
+
+function showAlphabet(){
+  // Open the two-panel alphabet explorer immediately.
+  alphabetExplorer("letters","A");
+}
+function showLetter(l){
+ alphabetExplorer("letters", l);
+}
+
+/* Nombres ASL — version corrigée 11–20.
+   Les séquences d'images ci-dessous reprennent les images successives
+   publiées par Lifeprint pour montrer le mouvement, et non seulement
+   une position fixe de la main. */
+
+const aslNumberImages = {
+  0: "https://tuxpaint.org/stamps/stamps/symbols/alphabets/asl/asl_zzz_0.png",
+  1: "https://www.lifeprint.com/asl101/signjpegs/numbers/number01.jpg",
+  2: "https://www.lifeprint.com/asl101/signjpegs/numbers/number02.jpg",
+  3: "https://www.lifeprint.com/asl101/signjpegs/numbers/number03.jpg",
+  4: "https://www.lifeprint.com/asl101/signjpegs/numbers/number04.jpg",
+  5: "https://www.lifeprint.com/asl101/signjpegs/numbers/number05.jpg",
+  6: "https://www.lifeprint.com/asl101/signjpegs/numbers/number06.jpg",
+  7: "https://www.lifeprint.com/asl101/signjpegs/numbers/number07.jpg",
+  8: "https://www.lifeprint.com/asl101/signjpegs/numbers/number08.jpg",
+  9: "https://www.lifeprint.com/asl101/signjpegs/numbers/number09.jpg",
+  10: "https://www.lifeprint.com/asl101/gifs-animated/10.gif"
+};
+
+const aslNumberSequences = {
+  11: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/11a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/11b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/11c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/11d.jpg"
+  ],
+  12: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/12a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/12b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/12c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/12d.jpg"
+  ],
+  13: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/13a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/13b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/13c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/13d.jpg"
+  ],
+  14: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/14a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/14b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/14c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/14d.jpg"
+  ],
+  15: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/15a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/15b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/15c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/15d.jpg"
+  ],
+  16: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/16a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/16b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/16c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/16d.jpg"
+  ],
+  17: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/17a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/17b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/17c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/17d.jpg"
+  ],
+  18: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/18a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/18b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/18c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/18d.jpg"
+  ],
+  19: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/19a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/19b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/19c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/19d.jpg"
+  ],
+  20: [
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/20a.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/20b.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/20c.jpg",
+    "https://www.lifeprint.com/asl101/signjpegs/numbers/20d.jpg"
+  ]
+};
+
+/*
+  Règle pédagogique du mouvement :
+  - 11–15 : le mouvement est effectué 2 fois.
+  - 16–19 : la rotation vers l'avant est effectuée 2 fois.
+  - 20 : le rapprochement index-pouce est effectué 2 fois.
+  L'animation ne boucle donc plus indéfiniment.
+*/
+const numberMotionRules = {
+  11:{repetitions:2,label:"2 répétitions"},
+  12:{repetitions:2,label:"2 répétitions"},
+  13:{repetitions:2,label:"2 répétitions"},
+  14:{repetitions:2,label:"2 répétitions"},
+  15:{repetitions:2,label:"2 répétitions"},
+  16:{repetitions:2,label:"2 rotations"},
+  17:{repetitions:2,label:"2 rotations"},
+  18:{repetitions:2,label:"2 rotations"},
+  19:{repetitions:2,label:"2 rotations"},
+  20:{repetitions:2,label:"2 répétitions"}
+};
+
+const numbersASL = Array.from({length:21}, (_,i)=>i);
+let numberAnimationTimer = null;
+
+function stopNumberAnimation(){
+  if(numberAnimationTimer){
+    clearInterval(numberAnimationTimer);
+    numberAnimationTimer = null;
+  }
+}
+
+function showNumberFrame(n, frame, repetition=1){
+  const img = document.getElementById("numberAnimatedImage");
+  const indicator = document.getElementById("numberFrameIndicator");
+  const frames = aslNumberSequences[n];
+  const rule = numberMotionRules[n];
+  if(!img || !frames) return;
+  const f = frame % frames.length;
+  img.src = frames[f];
+  img.alt = `Signe ASL du nombre ${n}, étape ${f+1} sur ${frames.length}`;
+  if(indicator){
+    indicator.textContent = rule
+      ? `${rule.label} • répétition ${repetition}/${rule.repetitions}`
+      : `Étape ${f+1}/${frames.length}`;
+  }
+}
+
+function startNumberAnimation(n){
+  stopNumberAnimation();
+  const frames = aslNumberSequences[n];
+  const rule = numberMotionRules[n];
+  if(!frames) return;
+
+  frames.forEach(src => { const pre = new Image(); pre.src = src; });
+
+  let frame = 0;
+  let repetition = 1;
+  showNumberFrame(n, frame, repetition);
+
+  numberAnimationTimer = setInterval(() => {
+    frame++;
+
+    if(frame >= frames.length){
+      frame = 0;
+      repetition++;
+
+      if(rule && repetition > rule.repetitions){
+        // Dernière image affichée, puis arrêt définitif.
+        showNumberFrame(n, frames.length - 1, rule.repetitions);
+        stopNumberAnimation();
+        return;
+      }
+    }
+
+    showNumberFrame(n, frame, repetition);
+  }, 520);
+}
+
+function showNumbers(selected=0){
+  stopNumberAnimation();
+  const safe = numbersASL.includes(Number(selected)) ? Number(selected) : 0;
+  const animated = !!aslNumberSequences[safe];
+  const rule = numberMotionRules[safe];
+
+  document.getElementById("main").innerHTML = `
+    <div class="sectionTitle">
+      <h2>🔢 Chiffres et nombres ASL</h2>
+      <button class="back" onclick="back()">← Retour</button>
+    </div>
+
+    <div class="numberExplorer">
+      <section class="numberPanel">
+        <div class="panelTitle">
+          <h3>Choisis un nombre</h3>
+          <span class="note">0–20</span>
+        </div>
+        <div class="numberList">
+          ${numbersASL.map(n => `
+            <button class="numberTile ${n===safe ? "active" : ""}"
+                    type="button"
+                    onclick="showNumbers(${n})">${n}</button>
+          `).join("")}
+        </div>
+      </section>
+
+      <section class="numberSignPanel">
+        <div class="panelTitle">
+          <h3>Signe correspondant</h3>
+        </div>
+
+        <div class="selectedNumberImage" style="min-height:270px;display:flex;align-items:center;justify-content:center;position:relative">
+          ${animated
+            ? `<img id="numberAnimatedImage"
+                    src="${aslNumberSequences[safe][0]}"
+                    alt="Signe ASL animé du nombre ${safe}"
+                    style="max-width:100%;max-height:300px;object-fit:contain;border-radius:14px">
+               <span id="numberFrameIndicator"
+                     style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.7);color:#fff;padding:5px 9px;border-radius:10px;font-size:12px">${rule.label} • répétition 1/${rule.repetitions}</span>`
+            : `<img
+                 src="${aslNumberImages[safe]}"
+                 alt="Signe ASL du nombre ${safe}"
+                 style="max-width:100%;max-height:300px;object-fit:contain;border-radius:14px"
+                 onerror="this.onerror=null;this.parentElement.innerHTML='<div style=&quot;color:#24324d;text-align:center;font-weight:800;padding:30px&quot;>Image du signe ${safe} indisponible.<br>Vérifiez la connexion Internet.</div>'">`
+          }
+        </div>
+
+        <div class="numberInfo">
+          <strong>Nombre : ${safe}</strong><br>
+          ${animated
+            ? `L'animation montre exactement <b>${rule.repetitions}</b> répétitions/rotations, puis elle s'arrête automatiquement.`
+            : "Image de référence du signe sélectionné."}
+        </div>
+
+        <p class="numberSource">
+          Référence : Lifeprint / ASL University, « Numbers 11–20 ».
+          Lifeprint décrit 11–15 avec un mouvement double, 16–19 avec deux rotations vers l'avant,
+          et 20 avec un mouvement répété de l'index et du pouce.
+        </p>
+      </section>
+    </div>
+
+    <div class="detail" style="margin-top:16px">
+      <h3>🔄 Comprendre le mouvement</h3>
+      <p class="note">
+        <b>11–15 :</b> le mouvement est répété deux fois.
+        <b>16–19 :</b> la forme du nombre commence paume vers l'arrière puis effectue deux rotations vers l'avant.
+        <b>20 :</b> l'index et le pouce se rapprochent deux fois.
+      </p>
+      <p class="source">
+        L'animation s'arrête volontairement après le nombre exact de répétitions afin que l'élève
+        ne pense pas que le mouvement doit continuer indéfiniment.
+      </p>
+    </div>`;
+
+  if(animated) startNumberAnimation(safe);
+}
+
+
+function showVocab(){
+ document.getElementById("main").innerHTML=`<div class="sectionTitle"><h2>👋 Premiers signes</h2><button class="back" onclick="back()">← Retour</button></div>
+ <input class="search" placeholder="🔎 Rechercher un mot..." oninput="filterVocab(this.value)">
+ <div id="vocabGrid" class="vocabGrid">${vocabCards(vocab)}</div>`;
+}
+function vocabCards(list){return list.map(v=>`<button class="vocab" onclick="showVocabDetail(${JSON.stringify(v[0])})"><div class="icon">${v[1]}</div><strong>${v[0]}</strong><small>${v[2]}</small></button>`).join("")}
+function filterVocab(q){const list=vocab.filter(v=>(v[0]+" "+v[2]).toLowerCase().includes(q.toLowerCase()));document.getElementById("vocabGrid").innerHTML=vocabCards(list)||"<p>Aucun signe trouvé.</p>"}
+const aslPages={
+ "Merci":"https://www.lifeprint.com/asl101/pages-signs/t/thankyou.htm",
+ "Bonjour":"https://www.lifeprint.com/asl101/pages-signs/h/hello.htm",
+ "S'il te plaît":"https://www.lifeprint.com/asl101/pages-signs/p/please.htm",
+ "Je comprends":"https://www.lifeprint.com/asl101/pages-signs/u/understand.htm",
+ "École":"https://www.lifeprint.com/asl101/pages-signs/s/school.htm",
+ "Professeur":"https://www.lifeprint.com/asl101/pages-signs/t/teacher.htm",
+ "Élève":"https://www.lifeprint.com/asl101/pages-signs/s/student.htm"
+};
+function showVocabDetail(word){
+ const v=vocab.find(x=>x[0]===word)||["Mot","🤟",""];
+ const source=aslPages[v[0]]||"https://www.lifeprint.com/asl101/pages-signs/search.htm";
+ document.getElementById("main").innerHTML=`<div class="sectionTitle"><h2>Fiche : ${v[0]}</h2><button class="back" onclick="showVocab()">← Signes</button></div>
+ <div class="detail"><div class="bigLetter">${v[1]}</div>
+ <div class="videoWrap"><iframe src="https://www.youtube.com/embed/zC24wjEnZrg" title="Ressource vidéo ASL" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+ <p class="source">Vidéo d'introduction ASL. Pour le signe précis, utilisez la fiche ASL correspondante.</p>
+ <div class="actions">
+   <a class="primary linkBtn" href="${source}" target="_blank" rel="noopener">🤟 Voir le signe ${v[0]} sur ASL University</a>
+   <button class="secondary" onclick="speak('${v[0]}')">🔊 Prononcer le mot</button>
+   <button class="primary" onclick="markLearned('mot-${v[0]}')">✓ J'ai appris ce signe</button>
+ </div>
+ <p class="note">La vidéo intégrée présente une ressource ASL générale. Les fiches Lifeprint liées donnent la démonstration et les explications du signe lorsqu'elles sont disponibles. Certaines expressions peuvent avoir plusieurs formes selon le contexte.</p></div>`;
+}
+function speak(t){if("speechSynthesis"in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t));}}
+/* ===== QUIZ INTERACTIF V2 =====
+   Deux modes :
+   1) Lettres : A–Z
+   2) Chiffres & nombres : 0–20
+   Chaque question propose exactement 4 signes/images.
+*/
+let quizMode = null;
+let quizQuestion = null;
+let quizRound = 0;
+let quizCorrect = 0;
+let quizAnswered = false;
+let quizAnimationTimer = null;
+let quizAnimFrames = {};
+let quizAnimIndex = {};
+
+function stopQuizAnimations(){
+  if(quizAnimationTimer){
+    clearInterval(quizAnimationTimer);
+    quizAnimationTimer = null;
+  }
+  quizAnimFrames = {};
+  quizAnimIndex = {};
+}
+
+function showQuiz(){
+  stopQuizAnimations();
+  document.getElementById("main").innerHTML = `
+    <div class="sectionTitle">
+      <h2>🎮 Quiz interactif ASL</h2>
+      <button class="back" onclick="back()">← Retour</button>
+    </div>
+
+    <div class="detail quizStart">
+      <div class="quizTop">
+        <h3 style="margin:0">Choisis ton mode</h3>
+        <span class="quizCounter">2 types d'exercices</span>
+      </div>
+
+      <div class="quizModeGrid" style="margin-top:18px">
+        <button class="quizModeCard" type="button" onclick="startQuiz('numbers')">
+          <div class="quizModeIcon">🔢</div>
+          <h3>Mode chiffres & nombres</h3>
+          <p>Reconnaître les signes ASL de 0 à 20.</p>
+        </button>
+
+        <button class="quizModeCard" type="button" onclick="startQuiz('letters')">
+          <div class="quizModeIcon">🔤</div>
+          <h3>Mode lettres</h3>
+          <p>Reconnaître les signes ASL de A à Z.</p>
+        </button>
+      </div>
+
+      <p class="note" style="text-align:center;margin-top:18px">
+        Pour chaque question, quatre signes sont proposés. Clique sur celui qui correspond à la cible.
+      </p>
+    </div>`;
+}
+
+function shuffleArray(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function startQuiz(mode){
+  stopQuizAnimations();
+  quizMode = mode;
+  quizRound = 0;
+  quizCorrect = 0;
+  nextQuizQuestion();
+}
+
+function quizPool(){
+  return quizMode === "letters" ? alphabet : numbersASL;
+}
+
+function getQuizFrames(mode, value){
+  if(mode === "letters"){
+    return [aslImages[value]];
+  }
+  if(aslNumberSequences[value]) return aslNumberSequences[value];
+  return [aslNumberImages[value]];
+}
+
+function createQuizQuestion(){
+  const pool = quizPool();
+  const target = pool[Math.floor(Math.random()*pool.length)];
+
+  // Trois distracteurs différents.
+  const distractors = shuffleArray(pool.filter(x => x !== target)).slice(0,3);
+  const choices = shuffleArray([target,...distractors]);
+
+  quizQuestion = {target, choices};
+}
+
+function renderQuizQuestion(){
+  stopQuizAnimations();
+  createQuizQuestion();
+  quizAnswered = false;
+
+  quizAnimFrames = {};
+  quizAnimIndex = {};
+
+  const targetLabel = quizMode === "letters"
+    ? quizQuestion.target
+    : String(quizQuestion.target);
+
+  const choicesHtml = quizQuestion.choices.map((value,i)=>{
+    const frames = getQuizFrames(quizMode,value);
+    const id = `quizImg_${i}`;
+    quizAnimFrames[id] = frames;
+    quizAnimIndex[id] = 0;
+
+    return `
+      <button class="quizChoice" id="quizChoice_${i}" type="button" onclick="answerVisual(${i})">
+        <img id="${id}" src="${frames[0]}" alt="Signe ASL ${value}"
+             onerror="this.onerror=null;this.style.display='none';">
+        <span class="choiceLabel">Réponse ${i+1}</span>
+      </button>`;
+  }).join("");
+
+  document.getElementById("main").innerHTML = `
+    <div class="sectionTitle">
+      <h2>🎮 Quiz — ${quizMode === "letters" ? "Mode lettres" : "Mode chiffres & nombres"}</h2>
+      <button class="back" onclick="showQuiz()">← Changer de mode</button>
+    </div>
+
+    <div class="detail quiz">
+      <div class="quizTop">
+        <span class="quizCounter">Question ${quizRound+1}</span>
+        <span class="quizScore">Score : ${quizCorrect}/${quizRound}</span>
+      </div>
+
+      <div class="quizTarget">${targetLabel}</div>
+      <p class="quizInstruction">
+        ${quizMode === "letters"
+          ? "Quel signe correspond à cette lettre ?"
+          : "Quel signe correspond à ce chiffre ou nombre ?"}
+      </p>
+
+      <div class="quizChoices">${choicesHtml}</div>
+
+      <p id="quizFeedback" class="quizFeedback"></p>
+
+      <div class="quizFooter">
+        <button class="secondary" type="button" onclick="showQuiz()">🎯 Changer de mode</button>
+      </div>
+    </div>`;
+
+  startQuizAnimations();
+}
+
+function startQuizAnimations(){
+  const animatedIds = Object.keys(quizAnimFrames).filter(id => quizAnimFrames[id].length > 1);
+  if(!animatedIds.length) return;
+
+  // Préchargement des images.
+  animatedIds.forEach(id=>{
+    quizAnimFrames[id].forEach(src=>{const pre=new Image();pre.src=src;});
+  });
+
+  // Chaque signe animé joue exactement le nombre de répétitions
+  // prévu pour le nombre concerné, puis s'arrête.
+  const repetitionsById = {};
+  const completedById = {};
+  animatedIds.forEach(id=>{
+    const value = quizQuestion.choices[Number(id.replace("quizImg_",""))];
+    repetitionsById[id] =
+      (quizMode === "numbers" && numberMotionRules[value])
+        ? numberMotionRules[value].repetitions
+        : 1;
+    completedById[id] = 1;
+  });
+
+  quizAnimationTimer = setInterval(()=>{
+    let allFinished = true;
+
+    animatedIds.forEach(id=>{
+      const frames = quizAnimFrames[id];
+      const next = quizAnimIndex[id] + 1;
+
+      if(next >= frames.length){
+        quizAnimIndex[id] = 0;
+        completedById[id]++;
+
+        if(completedById[id] > repetitionsById[id]){
+          // Laisser la dernière image visible et ne plus avancer.
+          quizAnimIndex[id] = frames.length - 1;
+          return;
+        }
+      }else{
+        quizAnimIndex[id] = next;
+      }
+
+      if(completedById[id] <= repetitionsById[id]) allFinished = false;
+
+      const img = document.getElementById(id);
+      if(img) img.src = frames[quizAnimIndex[id]];
+    });
+
+    if(allFinished){
+      stopQuizAnimations();
+    }
+  },520);
+}
+
+function answerVisual(index){
+  if(quizAnswered) return;
+  quizAnswered = true;
+  stopQuizAnimations();
+
+  const buttons = [...document.querySelectorAll(".quizChoice")];
+  const chosen = quizQuestion.choices[index];
+  const correct = chosen === quizQuestion.target;
+  const feedback = document.getElementById("quizFeedback");
+
+  buttons.forEach((b,n)=>{
+    b.disabled = true;
+    if(quizQuestion.choices[n] === quizQuestion.target){
+      b.classList.add("correct");
+    }
+  });
+
+  if(correct){
+    buttons[index].classList.add("correct");
+    quizCorrect++;
+    score += 10;
+    localStorage.setItem("signesScore",score);
+    feedback.innerHTML = "✅ Bonne réponse ! +10 points.";
+    feedback.style.color = "var(--accent)";
+  }else{
+    buttons[index].classList.add("wrong");
+    feedback.innerHTML = "❌ Mauvaise réponse. La bonne réponse est mise en vert.";
+    feedback.style.color = "var(--danger)";
+  }
+
+  quizRound++;
+
+  setTimeout(()=>{
+    if(quizRound >= 10){
+      showQuizResult();
+    }else{
+      renderQuizQuestion();
+    }
+  },1200);
+}
+
+function nextQuizQuestion(){
+  renderQuizQuestion();
+}
+
+function showQuizResult(){
+  stopQuizAnimations();
+  const percent = Math.round((quizCorrect/10)*100);
+
+  document.getElementById("main").innerHTML = `
+    <div class="sectionTitle">
+      <h2>🏆 Résultat du quiz</h2>
+      <button class="back" onclick="showQuiz()">← Retour au choix du mode</button>
+    </div>
+
+    <div class="detail quizStart" style="text-align:center">
+      <div class="quizTarget">${quizCorrect}/10</div>
+      <h3>${percent}% de réussite</h3>
+      <p class="note">
+        Tu as terminé les 10 questions du
+        <b>${quizMode === "letters" ? "mode lettres" : "mode chiffres & nombres"}</b>.
+      </p>
+      <div class="actions" style="justify-content:center">
+        <button class="primary" onclick="startQuiz('${quizMode}')">🔄 Recommencer</button>
+        <button class="secondary" onclick="showQuiz()">🎯 Choisir un autre mode</button>
+      </div>
+    </div>`;
+}
+
+
+function markLearned(id){if(!learned.includes(id)){learned.push(id);localStorage.setItem("signesLearned",JSON.stringify(learned));}alert("✅ Bravo ! Élément ajouté à ta progression.");}
+function showProgress(){
+ const pct=Math.min(100,Math.round(learned.length/46*100));
+ document.getElementById("main").innerHTML=`<div class="sectionTitle"><h2>🏆 Ma progression</h2><button class="back" onclick="back()">← Retour</button></div>
+ <div class="detail"><h3>Éléments appris</h3><div class="progress"><div style="width:${pct}%"></div></div><p>${learned.length} élément(s) appris sur 46 — ${pct}%</p>
+ <h3>🎮 Points de quiz</h3><p style="font-size:30px;font-weight:800">${score} points</p>
+ <h3>🏅 Badges</h3><div class="badges">${learned.length>=1?'<span class="badge">🌱 Premier apprentissage</span>':''}${learned.length>=10?'<span class="badge">⭐ 10 éléments</span>':''}${learned.length>=26?'<span class="badge">🔤 Alphabet en route</span>':''}${score>=50?'<span class="badge">🎮 Quiz confirmé</span>':''}${learned.length===0&&score===0?'<span class="badge">Commence ton parcours !</span>':''}</div>
+ <div class="actions"><button class="secondary" onclick="if(confirm('Réinitialiser la progression ?')){learned=[];score=0;localStorage.clear();showProgress()}">Réinitialiser</button></div></div>`;
+}
+showHome();
+</script>
+</body>
+</html>
