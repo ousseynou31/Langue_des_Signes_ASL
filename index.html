@@ -509,7 +509,7 @@ function showNumbers(selected=0){
     <div class="detail" style="margin-top:16px">
       <h3>🔄 Comprendre le mouvement</h3>
       <p class="note">
-        <b>11–15 :</b> le mouvement est répété deux fois.
+        <b>11–15 :</b> le mouvement est répété .
         <b>16–19 :</b> la forme du nombre commence paume vers l'arrière puis effectue deux rotations vers l'avant.
         <b>20 :</b> l'index et le pouce se rapprochent deux fois.
       </p>
@@ -551,7 +551,7 @@ function showVocabDetail(word){
    <button class="secondary" onclick="speak('${v[0]}')">🔊 Prononcer le mot</button>
    <button class="primary" onclick="markLearned('mot-${v[0]}')">✓ J'ai appris ce signe</button>
  </div>
- <p class="note">La vidéo intégrée présente une ressource ASL générale. Les fiches Lifeprint liées donnent la démonstration et les explications du signe lorsqu'elles sont disponibles. Certaines expressions peuvent avoir plusieurs formes selon le contexte.</p></div>`;
+ <p class="note">La vidéo intégrée présente une ressource ASL générale.</p></div>`;
 }
 function speak(t){if("speechSynthesis"in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t));}}
 /* ===== QUIZ INTERACTIF V2 =====
