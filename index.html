@@ -249,7 +249,7 @@ function alphabetExplorer(mode="letters", selected="A"){
  const right = mode==="letters"
    ? `<div class="selectedSign"><img src="${aslImages[safe]}" alt="Signe ASL de la lettre ${safe}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'text-align:center;color:#24324d;font-weight:800\'>Image du signe ${safe} indisponible</div>'"></div>
       <h2 style="text-align:center;margin:12px 0 0">Lettre ${safe}</h2>
-      <p class="note" style="text-align:center">Clique sur une autre lettre à gauche pour afficher son signe.</p>`
+      <p class="note" style="text-align:center">Clique sur une autre lettre pour afficher son signe.</p>`
    : `<div class="letterResult"><div>${safe}</div><small>Le signe sélectionné correspond à la lettre ${safe}.</small></div>
       <p class="note" style="text-align:center">Clique sur une autre image à gauche pour identifier le signe.</p>`;
 
